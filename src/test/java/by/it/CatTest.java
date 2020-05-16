@@ -21,7 +21,7 @@ public class CatTest {
     public void init() {
         EntityManager em = EmUtils.getEntityManager();
         em.getTransaction().begin();
-        Cat cat = new Cat(null, "Cat", "Tim", "brown", 2, null);
+        Cat cat = new Cat(null, "Cat", "Tim", "brown", 2, null, null);
         em.persist(cat);
         em.getTransaction().commit();
         em.close();
@@ -44,9 +44,10 @@ public class CatTest {
         List<Number> revisions = AuditReaderFactory.get(em).getRevisions(Cat.class, 1L);
         System.out.println(revisions);
         for (Number revision : revisions) {
-            System.out.println(AuditReaderFactory.get(em)
+            Object singleResult = AuditReaderFactory.get(em)
                     .createQuery()
-                    .forEntitiesAtRevision(Cat.class, revision).getSingleResult());
+                    .forEntitiesAtRevision(Cat.class, revision).getSingleResult();
+            System.out.println(singleResult);
         }
 
         em.close();
